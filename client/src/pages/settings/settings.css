@@ -1,0 +1,16 @@
+.settings {
+  font-size: 1.1rem;
+  display: flex;
+  width:auto;
+}
+.pic{
+  margin: auto;
+  margin-top: 40px;
+  margin-bottom: 40px;
+}
+.settingsWrapper {
+  flex: 9;
+  align-items: center;
+  text-align: center;
+  padding: 20px;
+}
