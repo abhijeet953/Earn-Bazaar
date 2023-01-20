@@ -5,13 +5,13 @@ const { v4 : uuidv4 } = require('uuid');
 
 //CREATE POST
 router.post("/", async (req, res) => {
-  const thisId = uuidv4();
-  const temp = {...req.body, id:thisId }
-  const newPost = new Post(temp);
   try {
+    const tempId = uuidv4();
+    const newPost = new Post({...req.body, id: tempId});
     const savedPost = await newPost.save();
     res.status(200).json(savedPost);
   } catch (err) {
+    // console.log(err);
     res.status(500).json(err);
   }
 });

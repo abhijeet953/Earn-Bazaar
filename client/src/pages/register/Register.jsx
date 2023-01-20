@@ -63,7 +63,7 @@ export default function Register() {
           Register
         </button>
       </form>
-      <button className="registerLoginButton btn btn-outline-secondary">
+      <button className="registerLoginButton btn-lg btn btn-outline-secondary">
         <Link className="link rm-txt-dec" to="/login">
           Login
         </Link>

@@ -6,7 +6,7 @@ import DatePicker from "react-date-picker";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import { writePost } from "../httpCommon";
+import axiosBaseURL, { writePost } from "../httpCommon";
 
 export default function Write() {
   const [title, setTitle] = useState("");
@@ -38,7 +38,7 @@ export default function Write() {
       data.append("file", file);
       newPost.photo = filename;
       try {
-        await axios.post("/upload", data);
+        await axiosBaseURL.post("/upload", data);
       } catch (err) {}
     }
     try {

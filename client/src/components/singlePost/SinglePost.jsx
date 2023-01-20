@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { useLocation } from "react-router";
 import { Link } from "react-router-dom";
@@ -5,9 +6,9 @@ import { Context } from "../../context/Context";
 import "./singlePost.css";
 import Container from "react-bootstrap/esm/Container";
 import Button from "react-bootstrap/esm/Button";
+import Row from "react-bootstrap/esm/Row";
+import Col from "react-bootstrap/esm/Col";
 import axiosBaseURL from "../../pages/httpCommon";
-// import Row from "react-bootstrap/esm/Row";
-// import Col from "react-bootstrap/esm/Col";
 
 export default function SinglePost() {
   const location = useLocation();
@@ -82,7 +83,7 @@ export default function SinglePost() {
         <div className="singlePostInfo">
           <span className="singlePostAuthor">
             Author:
-            <Link to={`/?user=${post.username}`} className="link">
+            <Link to={`/profile/${post.username}`} className="link">
               <b> {post.username}</b>
             </Link>
           </span>

@@ -5,6 +5,8 @@ const UserSchema = new mongoose.Schema(
     username: {
       type: String,
       required: true,
+      min: 3,
+      max: 20,
       unique: true,
     },
     email: {
@@ -22,7 +24,27 @@ const UserSchema = new mongoose.Schema(
     userCategory:{
       type: String,
       required: true,
-    }
+    },
+    followers: {
+      type: Array,
+      default: [],
+    },
+    followings: {
+      type: Array,
+      default: [],
+    },
+    isAdmin: {
+      type: Boolean,
+      default: false,
+    },
+    desc: {
+      type: String,
+      max: 50,
+    },
+    city: {
+      type: String,
+      max: 50,
+    },
   },
   { timestamps: true }
 );

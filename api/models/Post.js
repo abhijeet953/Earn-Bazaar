@@ -4,8 +4,8 @@ const PostSchema = new mongoose.Schema(
   {
     id:{
       type: String,
-      required: true,
       unique: true,
+      required: true,
     },
     title: {
       type: String,
@@ -21,19 +21,15 @@ const PostSchema = new mongoose.Schema(
     },
     reward: {
       type: String,
-      required: false,
     },
     category: {
       type: String,
-      required: false,
     },
     guest: {
       type: String,
-      required: false,
     },
     photo: {
       type: String,
-      required: false,
     },
     username: {
       type: String,
@@ -41,7 +37,6 @@ const PostSchema = new mongoose.Schema(
     },
     categories: {
       type: Array,
-      required: false,
     },
     userCategory:{
       type: String,
