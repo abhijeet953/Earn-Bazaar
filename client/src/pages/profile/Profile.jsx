@@ -1,9 +1,9 @@
-import React from 'react'
-import { useState, useContext, useEffect } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
-// import { Context } from '../../context/Context';
-import axiosBaseURL from '../httpCommon';
-import Posts from '../../components/posts/Posts';
+import React from "react";
+import { useState, useContext, useEffect } from "react";
+import { useLocation, useParams, Link } from "react-router-dom";
+import { Context } from '../../context/Context';
+import axiosBaseURL from "../httpCommon";
+import Posts from "../../components/posts/Posts";
 import Avatar from "react-avatar";
 
 import {
@@ -15,57 +15,85 @@ import {
   MDBListGroupItem,
 } from "mdb-react-ui-kit";
 import Button from "react-bootstrap/esm/Button";
+import { useNavigate } from "react-router-dom";
 
-const Profile = ({username}) => {
+const Profile = ({ username }) => {
+  const location = useLocation();
+  const path = location.pathname.split("/")[2];
+  const [otherUser, setOtherUser] = useState([]);
+  const navigate = useNavigate();
+  const { user } = useContext(Context);
 
-    const location = useLocation();
-    const path = location.pathname.split("/")[2];
-    const [ user, setUser ] = useState([]);
+  useEffect(() => {
+    const fetchPosts = async () => {
+      const res = await axiosBaseURL.get("/users/profile/" + path);
+      const userDetails = res.data;
+      setOtherUser(userDetails[0]);
+    };
+    fetchPosts();
+  }, [path]);
 
-    useEffect(() => {
-        const fetchPosts = async () => {
-            const res = await axiosBaseURL.get("/users/profile/" + path);
-            const userDetails = res.data;
-            setUser(userDetails[0]);
-        };
-        fetchPosts();      
-    }, [path])
+  const handleMessage = () => {
+    const friendship ={
+      senderId: otherUser._id,
+      receiverId: user._id
+    }
+    const setConversations = async () => {
+      try {
+        await axiosBaseURL.post("/conversations", friendship);
+        navigate("/messenger");
+      } catch (err) {
+        console.log(err);
+      }
+    } 
+    setConversations();
+  }
 
   return (
     <>
-    <div>Profile</div>
-    <div className="settings">
-      <MDBCard className="settingsWrapper">
-        <div className="pic">
+      <div className="settings">
+        <MDBCard className="settingsWrapper">
+          <MDBCardBody>
+            <MDBCardTitle> Profile </MDBCardTitle>
+          </MDBCardBody>
           <Avatar
             color={Avatar.getRandomColor("sitebase")}
             size="95"
-            name={user?.username}
+            name={otherUser?.username}
             round={true}
           />{" "}
-        </div>
-        <MDBListGroup >
-          <MDBListGroupItem>
-            <b>Name: </b>{user?.username}
-          </MDBListGroupItem>
-          <MDBListGroupItem>
-            <b>Email: </b> {user?.email}
-          </MDBListGroupItem>
-          <MDBListGroupItem>
-            <b>Category: </b> {user?.userCategory}
-          </MDBListGroupItem>
-        </MDBListGroup>
-        <MDBCardBody>
           <MDBCardBody>
-            <MDBCardTitle> About Section</MDBCardTitle>
-            <MDBCardText>All other details.. User's Bio</MDBCardText>
+            <MDBCardTitle> {otherUser?.username} </MDBCardTitle>
+            <button className="btn btn-info" onClick={handleMessage} >
+              Message
+            </button>
           </MDBCardBody>
-        </MDBCardBody>
-      </MDBCard>
-    </div>
-  
+          <MDBListGroup>
+            <MDBListGroupItem>
+              <b>Name: </b>
+              {otherUser?.username}
+            </MDBListGroupItem>
+            <MDBListGroupItem>
+              <b>Email: </b> {otherUser?.email}
+            </MDBListGroupItem>
+            <MDBListGroupItem>
+              <b>Category: </b> {otherUser?.userCategory}
+            </MDBListGroupItem>
+          </MDBListGroup>
+          <MDBCardBody>
+            <MDBCardBody>
+              <MDBCardTitle> About Section</MDBCardTitle>
+              <MDBCardText>All other details.. User's Bio</MDBCardText>
+            </MDBCardBody>
+            <MDBCardTitle> Author's Posts: </MDBCardTitle>
+            <Link to={`/?user=${otherUser.username}`} className="link">
+              <b> View all Posts</b>
+            </Link>
+          </MDBCardBody>
+        </MDBCard>
+      </div>
     </>
-  )
-}
+  );
+};
 
-export default Profile
+export default Profile;

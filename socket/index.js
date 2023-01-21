@@ -8,7 +8,7 @@ let users = [];
 
 const addUser = (userId, socketId) => {
   !users.some((user) => user.userId === userId) &&
-    users.push({ userId, socketId });
+    users.push({ userId: userId, socketId: socketId });
 };
 
 const removeUser = (socketId) => {
@@ -25,13 +25,16 @@ io.on("connection", (socket) => {
 
   //take userId and socketId from user
   socket.on("addUser", (userId) => {
+    // console.log("userId on adding user:",userId);
     addUser(userId, socket.id);
-    io.emit("getUsers", users);
+    // io.emit("getUsers", users);
   });
 
   //send and get message
   socket.on("sendMessage", ({ senderId, receiverId, text }) => {
+    addUser(receiverId, socket.id);
     const user = getUser(receiverId);
+    // console.log(senderId, receiverId, text, user, users);
     io.to(user.socketId).emit("getMessage", {
       senderId,
       text,

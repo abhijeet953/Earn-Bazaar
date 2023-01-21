@@ -2,7 +2,7 @@ import "./messenger.css";
 // import Topbar from "../../components/topbar/Topbar";
 import Conversation from "../../components/conversations/Conversation";
 import Message from "../../components/message/Message";
-// import ChatOnline from "../../components/chatOnline/ChatOnline";
+import ChatOnline from "../../components/chatOnline/ChatOnline";
 import { useContext, useEffect, useRef, useState } from "react";
 import { Context } from "../../context/Context";
 // import axios from "axios";
@@ -15,7 +15,7 @@ export default function Messenger() {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [arrivalMessage, setArrivalMessage] = useState(null);
-//   const [onlineUsers, setOnlineUsers] = useState([]);
+  const [onlineUsers, setOnlineUsers] = useState([]);
   const socket = useRef();
   const { user } = useContext(Context);
   const scrollRef = useRef();
@@ -31,20 +31,22 @@ export default function Messenger() {
     });
   }, []);
 
+  
   useEffect(() => {
     arrivalMessage &&
       currentChat?.members.includes(arrivalMessage.sender) &&
       setMessages((prev) => [...prev, arrivalMessage]);
   }, [arrivalMessage, currentChat]);
 
-//   useEffect(() => {
-//     socket.current.emit("addUser", user._id);
+  useEffect(() => {
+    socket.current.emit("addUser", user._id);
 //     socket.current.on("getUsers", (users) => {
 //       setOnlineUsers(
 //         user.followings.filter((f) => users.some((u) => u.userId === f))
 //       );
 //     });
-//   }, [user]);
+  }, [user]);
+  // console.log(user?._id);
 
   useEffect(() => {
     const getConversations = async () => {
@@ -61,7 +63,7 @@ export default function Messenger() {
   useEffect(() => {
     const getMessages = async () => {
       try {
-        const res = await axiosBaseURL.get("/messages/" + currentChat?._id);
+        const res = await axiosBaseURL.get("/messages/" + currentChat._id);
         setMessages(res.data);
       } catch (err) {
         console.log(err);
@@ -69,6 +71,8 @@ export default function Messenger() {
     };
     getMessages();
   }, [currentChat]);
+  
+  console.log(currentChat);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -84,7 +88,7 @@ export default function Messenger() {
 
     socket.current.emit("sendMessage", {
       senderId: user._id,
-      receiverId,
+      receiverId: receiverId,
       text: newMessage,
     });
 
@@ -101,12 +105,16 @@ export default function Messenger() {
     scrollRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
+  const handleSearch = (e) =>{
+
+  }
+
   return (
     <>
       <div className="messenger">
         <div className="chatMenu">
           <div className="chatMenuWrapper">
-            <input placeholder="Search for friends" className="chatMenuInput" />
+            <input placeholder="Search for friends" className="chatMenuInput" onChange={e=>handleSearch(e)}/>
             {conversations.map((c) => (
               <div onClick={() => setCurrentChat(c)}>
                 <Conversation conversation={c} currentUser={user} />
@@ -144,7 +152,7 @@ export default function Messenger() {
             )}
           </div>
         </div>
-        {/* <div className="chatOnline">
+        <div className="chatOnline">
           <div className="chatOnlineWrapper">
             <ChatOnline
               onlineUsers={onlineUsers}
@@ -152,7 +160,7 @@ export default function Messenger() {
               setCurrentChat={setCurrentChat}
             />
           </div>
-        </div> */}
+        </div>
       </div>
     </>
   );

@@ -62,3 +62,7 @@ font-size:14px;
 font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 
 }
+
+.txt-dec{
+  text-decoration: none;
+}

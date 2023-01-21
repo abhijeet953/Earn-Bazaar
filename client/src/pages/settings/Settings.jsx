@@ -2,6 +2,7 @@ import "./settings.css";
 import { useContext } from "react";
 import { Context } from "../../context/Context";
 import Avatar from "react-avatar";
+import { Link } from "react-router-dom";
 
 import {
   MDBCard,
@@ -46,6 +47,12 @@ export default function Settings() {
             <MDBCardTitle> About Section</MDBCardTitle>
             <MDBCardText>All other details.. User's Bio</MDBCardText>
           </MDBCardBody>
+          <MDBCardBody>
+              <MDBCardTitle> Author's Posts: </MDBCardTitle>
+              <Link to={`/?user=${user.username}`} className="link">
+                <b> View all Posts</b>
+              </Link>
+            </MDBCardBody>
           <Button className="btn-md btn-warning" onClick={handleLogout}>
             Logout
           </Button>

@@ -67,15 +67,12 @@ export default function TopBar() {
             {user && (
               <NavDropdown
                 title={
-                  <i className="fa-regular fa-user profileIcon">
-                    {" "}
-                    <i className="profileText"> Profile</i>{" "}
-                  </i>
+                    "Profile"
                 }
                 id="collasible-nav-dropdown"
               >
                 <NavDropdown.Item>
-                  <Link to="/settings">
+                  <Link to="/settings" className="txt-dec">
                     <Avatar
                       className="avatar"
                       color={Avatar.getRandomColor("sitebase")}

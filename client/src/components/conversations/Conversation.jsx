@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import axiosBaseURL from "../../pages/httpCommon";
 import "./conversation.css";
 
 export default function Conversation({ conversation, currentUser }) {
@@ -11,7 +12,7 @@ export default function Conversation({ conversation, currentUser }) {
 
     const getUser = async () => {
       try {
-        const res = await axios("/users?userId=" + friendId);
+        const res = await axiosBaseURL("/users?userId=" + friendId);
         setUser(res.data);
       } catch (err) {
         console.log(err);

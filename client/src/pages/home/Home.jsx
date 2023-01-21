@@ -22,6 +22,9 @@ export default function Home() {
           if( item.userCategory !== user.userCategory ){
             validPost.push(item);
           }
+          if( search ){
+            validPost.push(item);
+          }
         }
         setPosts(validPost.sort((p1, p2) => {
           return new Date(p2.createdAt) - new Date(p1.createdAt);
@@ -31,6 +34,7 @@ export default function Home() {
           return new Date(p2.createdAt) - new Date(p1.createdAt);
         }));
       }
+      // console.log(posts);
     };
     fetchPosts();
   }, [user, search]);
