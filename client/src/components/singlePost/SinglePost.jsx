@@ -2,9 +2,11 @@ import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { useLocation } from "react-router";
 import { Link } from "react-router-dom";
+import { LinkContainer } from "react-router-bootstrap";
 import { Context } from "../../context/Context";
 import "./singlePost.css";
 import Container from "react-bootstrap/esm/Container";
+import Settings from "../../pages/settings/Settings";
 import Button from "react-bootstrap/esm/Button";
 import Row from "react-bootstrap/esm/Row";
 import Col from "react-bootstrap/esm/Col";
@@ -20,6 +22,8 @@ export default function SinglePost() {
   const [desc, setDesc] = useState("");
   const [updateMode, setUpdateMode] = useState(false);
 
+  console.log(user);
+  console.log(post);
   useEffect(() => {
     const getPost = async () => {
       const res = await axiosBaseURL.get("/posts/" + path);
@@ -66,26 +70,30 @@ export default function SinglePost() {
         ) : (
           <h1 className="singlePostTitle">
             {title}
-            {post.username === user?.username && (
+            {(post.username === user?.username) && (
               <div className="singlePostEdit">
                 <i
                   className="singlePostIcon far fa-edit"
                   onClick={() => setUpdateMode(true)}
-                ></i>
+                >edit</i>
                 <i
                   className="singlePostIcon far fa-trash-alt"
                   onClick={handleDelete}
-                ></i>
+                >delete</i>
               </div>
             )}
           </h1>
         )}
         <div className="singlePostInfo">
           <span className="singlePostAuthor">
-            Author:
-            <Link to={`/profile/${post.username}`} className="link">
-              <b> {post.username}</b>
-            </Link>
+            Author: 
+            {(user?.username === post.username) ? (
+                <Link to='/settings'>My Profile</Link>
+            ) : (
+              <Link to={`/profile/${post.username}`} className="link">
+                <b> {post.username}</b>
+              </Link>
+            )}
           </span>
           <span className="singlePostDate">
             {new Date(post.createdAt).toDateString()}

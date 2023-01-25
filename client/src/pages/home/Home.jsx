@@ -10,7 +10,7 @@ export default function Home() {
   const [posts, setPosts] = useState([]);
   const { search } = useLocation();
   const { user } = useContext(Context);
-
+  // console.log(search);
   useEffect(() => {
     const fetchPosts = async () => {
       const res = await axiosBaseURL.get("/posts" + search);
@@ -22,7 +22,7 @@ export default function Home() {
           if( item.userCategory !== user.userCategory ){
             validPost.push(item);
           }
-          if( search ){
+          if( user?.username === item.username ){
             validPost.push(item);
           }
         }
