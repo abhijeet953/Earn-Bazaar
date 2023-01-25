@@ -2,7 +2,7 @@ import "./messenger.css";
 // import Topbar from "../../components/topbar/Topbar";
 import Conversation from "../../components/conversations/Conversation";
 import Message from "../../components/message/Message";
-import ChatOnline from "../../components/chatOnline/ChatOnline";
+// import ChatOnline from "../../components/chatOnline/ChatOnline";
 import { useContext, useEffect, useRef, useState } from "react";
 import { Context } from "../../context/Context";
 // import axios from "axios";
@@ -63,11 +63,12 @@ export default function Messenger() {
   useEffect(() => {
     const getMessages = async () => {
       try {
-        const res = await axiosBaseURL.get("/messages/" + currentChat._id);
+        const res = await axiosBaseURL.get("/messages/" + currentChat?._id);
         setMessages(res.data);
       } catch (err) {
         console.log(err);
       }
+      // console.log("messages += ", messages);
     };
     getMessages();
   }, [currentChat]);
@@ -91,8 +92,16 @@ export default function Messenger() {
       receiverId: receiverId,
       text: newMessage,
     });
-
+    
     try {
+      let firstUserId = user._id;
+      let secondUserId = receiverId;
+      const exists1 = await axiosBaseURL.get(`/conversations/find/${firstUserId}/${secondUserId}`);
+      firstUserId = receiverId;
+      secondUserId = user._id;
+      const exists2 = await axiosBaseURL.get(`/conversations/find/${secondUserId}/${firstUserId}`);
+      message.conversationId = exists1.data || exists2.data;
+      // console.log(message);
       const res = await axiosBaseURL.post("/messages", message);
       setMessages([...messages, res.data]);
       setNewMessage("");
@@ -154,11 +163,11 @@ export default function Messenger() {
         </div>
         <div className="chatOnline">
           <div className="chatOnlineWrapper">
-            <ChatOnline
+            {/* <ChatOnline
               onlineUsers={onlineUsers}
               currentId={user._id}
               setCurrentChat={setCurrentChat}
-            />
+            /> */}
           </div>
         </div>
       </div>

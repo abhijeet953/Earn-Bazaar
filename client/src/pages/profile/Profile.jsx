@@ -40,7 +40,18 @@ const Profile = ({ username }) => {
     }
     const setConversations = async () => {
       try {
-        await axiosBaseURL.post("/conversations", friendship);
+        let firstUserId = user._id;
+        let secondUserId = otherUser._id;
+        const exists1 = await axiosBaseURL.get(`/conversations/find/${firstUserId}/${secondUserId}`);
+        if( exists1.data === null ){
+          firstUserId = otherUser._id;
+          secondUserId = user._id;
+          const exists2 = await axiosBaseURL.get(`/conversations/find/${secondUserId}/${firstUserId}`);
+          if( exists2.data === null ){
+            console.log("empty array");
+            await axiosBaseURL.post("/conversations", friendship);
+          }
+        }
         navigate("/messenger");
       } catch (err) {
         console.log(err);

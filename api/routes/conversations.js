@@ -4,20 +4,11 @@ const Conversation = require("../models/Conversation");
 //new conv
 
 router.post("/", async (req, res) => {
-  const possible1 = [req.body.senderId, req.body.receiverId];
-  const possible2 = [req.body.receiverId, req.body.senderId];
-  Conversation.deleteMany({members: possible1})
-  .then(() => console.log("deleted Possible1"))
-  .catch((err) => console.log(err));
-  Conversation.deleteMany({members: possible2})
-  .then(() => console.log("deleted Possible2"))
-  .catch((err) => console.log(err));
-   
-    const newConversation = new Conversation({
-      members: [req.body.senderId, req.body.receiverId],
-    });
-
-    try {
+  
+  try {       
+        const newConversation = new Conversation({
+          members: [req.body.senderId, req.body.receiverId],
+        });
       const savedConversation = await newConversation.save();
       res.status(200).json(savedConversation);
     } catch (err) {
