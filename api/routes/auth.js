@@ -8,7 +8,7 @@ router.post("/register", async (req, res) => {
   try {
     
     const tryUser = await User.findOne({ username: req.body.username });
-    tryUser && res.status(400).json("User already exist!");
+    if(tryUser.data !== null ) return res.status(400).json("User already exist!");
 
     const salt = await bcrypt.genSalt(10);
     const hashedPass = await bcrypt.hash(req.body.password, salt);
@@ -22,10 +22,10 @@ router.post("/register", async (req, res) => {
     });
 
     const user = await newUser.save();
-    res.status(200).json(user);
+    return res.status(200).json(user);
   } catch (err) {
     console.log(err);
-    res.status(500).json(err);
+    return res.status(500).json(err);
   }
 });
 
@@ -38,20 +38,20 @@ router.post("/login", async (req, res) => {
       const validated = await bcrypt.compare(req.body.password, user.password);
       if( validated === true ){
         const { password, ...others } = user._doc;
-        res.status(200).json(others);
+        return res.status(200).json(others);
 
       }
       else{
-        res.status(400).json("Wrong Password!");
+        return res.status(400).json("Wrong Password!");
       }
     }
     else{
-      res.status(400).json("User does not exist!");
+      return res.status(400).json("User does not exist!");
     }
 
 
   } catch (err) {
-    res.status(500).json(err);
+    return res.status(500).json(err);
   }
 });
 
