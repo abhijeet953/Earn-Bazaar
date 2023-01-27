@@ -12,7 +12,7 @@ import {
 } from "mdb-react-ui-kit";
 
 export default function Post({ post }) {
-  const PF = "http://localhost:5000/images/";
+  const PF = `${process.env.REACT_APP_AXIOS_BASEURL}/images/` || "http://localhost:5000/images/";
   return (
     <div className="post">
       <MDBCard>

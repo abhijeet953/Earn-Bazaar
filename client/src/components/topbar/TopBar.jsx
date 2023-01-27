@@ -14,7 +14,7 @@ import NavDropdown from "react-bootstrap/NavDropdown";
 
 export default function TopBar() {
   const { user, dispatch } = useContext(Context);
-  // const PF = "http://localhost:5000/images/";
+  // const PF = `${process.env.REACT_APP_AXIOS_BASEURL}/images/` || "http://localhost:5000/images/";
 
   const handleLogout = () => {
     dispatch({ type: "LOGOUT" });
@@ -59,6 +59,11 @@ export default function TopBar() {
             {!user && (
               <LinkContainer to="/register">
                 <Nav.Link className="topListItem">REGISTER</Nav.Link>
+              </LinkContainer>
+            )}
+            {user && (
+              <LinkContainer to="/messenger">
+                <Nav.Link className="topListItem">MESSAGE</Nav.Link>
               </LinkContainer>
             )}
           </Nav>

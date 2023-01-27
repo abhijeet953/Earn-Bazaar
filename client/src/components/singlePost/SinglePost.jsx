@@ -1,22 +1,20 @@
-import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { useLocation } from "react-router";
 import { Link } from "react-router-dom";
-import { LinkContainer } from "react-router-bootstrap";
+
 import { Context } from "../../context/Context";
-import "./singlePost.css";
-import Container from "react-bootstrap/esm/Container";
-import Settings from "../../pages/settings/Settings";
-import Button from "react-bootstrap/esm/Button";
-import Row from "react-bootstrap/esm/Row";
-import Col from "react-bootstrap/esm/Col";
+
 import axiosBaseURL from "../../pages/httpCommon";
+
+import Container from "react-bootstrap/esm/Container";
+import Button from "react-bootstrap/esm/Button";
+import "./singlePost.css";
 
 export default function SinglePost() {
   const location = useLocation();
   const path = location.pathname.split("/")[2];
   const [post, setPost] = useState({});
-  const PF = "http://localhost:5000/images/";
+  const PF = `${process.env.REACT_APP_AXIOS_BASEURL}/images/` || "http://localhost:5000/images/";
   const { user } = useContext(Context);
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
@@ -40,7 +38,7 @@ export default function SinglePost() {
         data: { username: user.username },
       });
       window.location.replace("/");
-    } catch (err) {}
+    } catch (err) { console.log(err)}
   };
 
   const handleUpdate = async () => {
@@ -51,7 +49,7 @@ export default function SinglePost() {
         desc,
       });
       setUpdateMode(false);
-    } catch (err) {}
+    } catch (err) {console.log(err)}
   };
   return (
     <div className="singlePost">
